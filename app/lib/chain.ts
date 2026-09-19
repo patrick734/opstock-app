@@ -116,6 +116,9 @@ export const SUPPORTED_TOKENS = [
   { symbol: 'SLV',   address: '0x411eFb0E7f985935DAec3D4C3ebaEa0d0AD7D89f' as `0x${string}`, decimals: 18, feed: '0x209b73908e92Ae021826eD79609845451Ecba2ce' as `0x${string}`, name: 'Silver ETF' },
   { symbol: 'USO',   address: '0xa30FA36Db767ad9eD3f7a60fC79526fB4d56D344' as `0x${string}`, decimals: 18, feed: '0x75a9c76Ef439e2C7c2E5a34Ab105EcFe3766431c' as `0x${string}`, name: 'Oil ETF' },
   { symbol: 'SGOV',  address: '0x92FD66527192E3e61d4DDd13322Aa222DE86F9B5' as `0x${string}`, decimals: 18, feed: '0xa0DF4ee0fFf975306345875E3548Fcc519577A11' as `0x${string}`, name: 'T-Bill ETF' },
+  { symbol: 'CRWV',  address: '0x5f10A1C971B69e47e059e1dC91901B59b3fB49C3' as `0x${string}`, decimals: 18, feed: '0xe1b3aABCAFAd1c94708dc1367dcfF8Aa4407487C' as `0x${string}`, name: 'CoreWeave' },
+  { symbol: 'NBIS',  address: '0x9D9c6684F596F66a64C030B93A886D51Fd4D7931' as `0x${string}`, decimals: 18, feed: '0xE1D87B116Ba0fe898998f1D140339D1fA1E09705' as `0x${string}`, name: 'Nebius' },
+  { symbol: 'RGTI',  address: '0x284358abc07F9359f19f4b5b4aC91901Be2597Ba' as `0x${string}`, decimals: 18, feed: '0x2A045cF1C49c61c166C036d2f06FA2D2d984f765' as `0x${string}`, name: 'Rigetti' },
 ]
 
 export async function getChainlinkPrice(feed: `0x${string}`): Promise<number> {
