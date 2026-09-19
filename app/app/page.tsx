@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { getChainlinkPrice, formatUSD, SUPPORTED_TOKENS, CONTRACTS, getTotalOptions, getTotalBinaries, getProtocolFee, getOpenOptions, getOpenBinaries, OPSTOCK_ABI, ERC20_ABI, TOKENS, getOptionsInRange, getBinariesInRange, robinhoodChain } from './lib/chain'
-import WalletConnect from './components/WalletConnect'
-import { getProtocolStats, getWalletStats } from './lib/indexer'
+import { getChainlinkPrice, formatUSD, SUPPORTED_TOKENS, CONTRACTS, getTotalOptions, getTotalBinaries, getProtocolFee, getOpenOptions, getOpenBinaries, OPSTOCK_ABI, ERC20_ABI, TOKENS, getOptionsInRange, getBinariesInRange, robinhoodChain } from '../lib/chain'
+import WalletConnect from '../components/WalletConnect'
+import { getProtocolStats, getWalletStats } from '../lib/indexer'
 import { createWalletClient, custom, parseUnits } from 'viem'
 
 const NAV = ['MARKETS', 'TRADE', 'BINARY', 'VAULT', 'POSITIONS']
