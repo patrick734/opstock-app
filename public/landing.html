@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OPSTOCK — On-Chain Options on Tokenized Stocks</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #050508;
+    --surface: #0a0b10;
+    --surface2: #0f1018;
+    --border: #1a1d2e;
+    --green: #00e676;
+    --green2: #00c853;
+    --blue: #2979ff;
+    --amber: #ffab00;
+    --white: #f0f2ff;
+    --muted: #5a6080;
+    --muted2: #8890b0;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--white); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(5,5,8,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 40px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-hex { width: 28px; height: 28px; background: var(--green); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); box-shadow: 0 0 12px rgba(0,230,118,0.4); }
+  .nav-brand { font-size: 16px; font-weight: 800; color: var(--green); letter-spacing: 0.15em; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a { color: var(--muted2); font-size: 13px; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta { background: var(--green); color: #000; padding: 8px 20px; border-radius: 6px; font-size: 13px; font-weight: 700; text-decoration: none; letter-spacing: 0.05em; transition: all 0.2s; }
+  .nav-cta:hover { background: var(--green2); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 40px 80px; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(0,230,118,0.06) 0%, transparent 70%); }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; opacity: 0.4; }
+  .hero-content { position: relative; text-align: center; max-width: 800px; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,230,118,0.08); border: 1px solid rgba(0,230,118,0.2); border-radius: 100px; padding: 6px 16px; margin-bottom: 32px; }
+  .hero-badge-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+  .hero-badge span { font-size: 12px; color: var(--green); font-weight: 600; letter-spacing: 0.08em; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .hero h1 { font-size: clamp(40px, 7vw, 72px); font-weight: 900; line-height: 1.1; margin-bottom: 24px; letter-spacing: -0.02em; }
+  .hero h1 span { color: var(--green); }
+  .hero p { font-size: clamp(16px, 2vw, 20px); color: var(--muted2); line-height: 1.7; margin-bottom: 40px; font-weight: 400; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 64px; }
+  .btn-primary { background: var(--green); color: #000; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 700; text-decoration: none; letter-spacing: 0.03em; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-primary:hover { background: var(--green2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,230,118,0.2); }
+  .btn-secondary { background: transparent; color: var(--white); padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; border: 1px solid var(--border); transition: all 0.2s; }
+  .btn-secondary:hover { border-color: var(--muted2); transform: translateY(-2px); }
+  .hero-tokens { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .token-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 6px 14px; font-size: 12px; font-weight: 600; color: var(--muted2); font-family: 'JetBrains Mono', monospace; }
+
+  /* STATS */
+  .stats { padding: 60px 40px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--surface); }
+  .stats-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .stat { background: var(--surface); padding: 32px; text-align: center; }
+  .stat-value { font-size: 36px; font-weight: 800; color: var(--white); margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; }
+  .stat-label { font-size: 12px; color: var(--muted); letter-spacing: 0.1em; font-weight: 500; }
+
+  /* PRODUCTS */
+  .section { padding: 100px 40px; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-tag { font-size: 12px; color: var(--green); font-weight: 600; letter-spacing: 0.15em; margin-bottom: 12px; text-transform: uppercase; }
+  .section-title { font-size: clamp(28px, 4vw, 42px); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em; }
+  .section-sub { font-size: 16px; color: var(--muted2); line-height: 1.7; max-width: 560px; margin-bottom: 60px; }
+  .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2px; background: var(--border); border: 1px solid var(--border); }
+  .product { background: var(--surface2); padding: 32px; transition: background 0.2s; cursor: default; }
+  .product:hover { background: var(--surface); }
+  .product-icon { font-size: 28px; margin-bottom: 16px; }
+  .product-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+  .product-desc { font-size: 13px; color: var(--muted2); line-height: 1.7; }
+  .product-tag { display: inline-block; margin-top: 16px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; padding: 3px 10px; border-radius: 4px; }
+
+  /* HOW IT WORKS */
+  .how { background: var(--surface); }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2px; background: var(--border); border: 1px solid var(--border); }
+  .step { background: var(--surface2); padding: 36px 32px; }
+  .step-num { font-size: 48px; font-weight: 900; color: var(--border); font-family: 'JetBrains Mono', monospace; margin-bottom: 16px; line-height: 1; }
+  .step-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+  .step-desc { font-size: 13px; color: var(--muted2); line-height: 1.7; }
+
+  /* MARKETS */
+  .markets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 2px; background: var(--border); border: 1px solid var(--border); margin-bottom: 40px; }
+  .market { background: var(--surface2); padding: 20px; border-top: 2px solid var(--green); }
+  .market-sym { font-size: 18px; font-weight: 800; color: var(--green); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; }
+  .market-name { font-size: 11px; color: var(--muted); }
+  .market-badge { font-size: 10px; color: var(--muted); border: 1px solid var(--border); padding: 2px 6px; border-radius: 3px; margin-top: 8px; display: inline-block; }
+
+  /* CTA */
+  .cta { padding: 120px 40px; text-align: center; position: relative; overflow: hidden; }
+  .cta-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,230,118,0.05) 0%, transparent 70%); }
+  .cta-content { position: relative; max-width: 600px; margin: 0 auto; }
+  .cta h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 900; margin-bottom: 16px; letter-spacing: -0.02em; }
+  .cta p { font-size: 16px; color: var(--muted2); margin-bottom: 40px; line-height: 1.7; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); padding: 40px; }
+  .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+  .footer-logo { display: flex; align-items: center; gap: 10px; }
+  .footer-hex { width: 20px; height: 20px; background: var(--green); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); }
+  .footer-brand { font-size: 14px; font-weight: 800; color: var(--green); letter-spacing: 0.15em; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: var(--muted); font-size: 13px; text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy { font-size: 12px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-hex"></div>
+    <span class="nav-brand">OPSTOCK</span>
+  </a>
+  <div class="nav-links">
+    <a href="#markets">Markets</a>
+    <a href="#products">Products</a>
+    <a href="#how">How it works</a>
+    <a href="https://robinhoodchain.blockscout.com/address/0x3b8a62892873243ae18d1731ffd6e646f748ef80" target="_blank">Contract ↗</a>
+  </div>
+  <a href="#" class="nav-cta">Launch App →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      <span>Live on Robinhood Chain</span>
+    </div>
+    <h1>Options on <span>Tokenized Stocks.</span> On-chain.</h1>
+    <p>Write covered calls, cash-secured puts, and binary bets on real stock tokens. Powered by Chainlink oracles. Settled on-chain. No custodian.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-primary">Launch App →</a>
+      <a href="https://robinhoodchain.blockscout.com/address/0x3b8a62892873243ae18d1731ffd6e646f748ef80" target="_blank" class="btn-secondary">View Contract ↗</a>
+    </div>
+    <div class="hero-tokens">
+      <span class="token-pill">$NVDA</span>
+      <span class="token-pill">$AAPL</span>
+      <span class="token-pill">$TSLA</span>
+      <span class="token-pill">$COIN</span>
+      <span class="token-pill">$SPY</span>
+      <span class="token-pill">+ More Coming</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-value" id="stat-markets">5</div>
+      <div class="stat-label">MARKETS</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="stat-options">0</div>
+      <div class="stat-label">OPTIONS WRITTEN</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">0.5%</div>
+      <div class="stat-label">PROTOCOL FEE</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">4663</div>
+      <div class="stat-label">CHAIN ID</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="section" id="products">
+  <div class="section-inner">
+    <div class="section-tag">// Products</div>
+    <h2 class="section-title">Everything you need to trade options on-chain</h2>
+    <p class="section-sub">Four products built on a single smart contract. All prices from Chainlink. All settlement on-chain.</p>
+    <div class="products">
+      <div class="product">
+        <div class="product-icon">↑</div>
+        <div class="product-title" style="color:#00e676">Covered Calls</div>
+        <div class="product-desc">Lock your stock tokens as collateral and earn USDG premium upfront. If the buyer exercises at expiry, you sell at your chosen strike. Keep the premium regardless.</div>
+        <span class="product-tag" style="background:rgba(0,230,118,0.08);color:#00e676;border:1px solid rgba(0,230,118,0.2)">WRITER EARNS PREMIUM</span>
+      </div>
+      <div class="product">
+        <div class="product-icon">↓</div>
+        <div class="product-title" style="color:#2979ff">Cash-Secured Puts</div>
+        <div class="product-desc">Lock USDG and earn premium for agreeing to buy stock at your chosen strike. If assigned, you acquire the stock at a discount. A disciplined way to accumulate.</div>
+        <span class="product-tag" style="background:rgba(41,121,255,0.08);color:#2979ff;border:1px solid rgba(41,121,255,0.2)">BUY THE DIP STRATEGY</span>
+      </div>
+      <div class="product">
+        <div class="product-icon">⟺</div>
+        <div class="product-title" style="color:#ffab00">Binary Options</div>
+        <div class="product-desc">Simple directional bets. Pick UP or DOWN and a target price. Chainlink settles at expiry. Winner takes nearly 2× their bet. The other side takes the loss.</div>
+        <span class="product-tag" style="background:rgba(255,171,0,0.08);color:#ffab00;border:1px solid rgba(255,171,0,0.2)">UP OR DOWN · WINNER TAKES ALL</span>
+      </div>
+      <div class="product">
+        <div class="product-icon">⬡</div>
+        <div class="product-title" style="color:#8890b0">Yield Vault</div>
+        <div class="product-desc">Deposit stock tokens into the vault. It systematically writes covered calls on your behalf and compounds the USDG yield. Passive income on your stock positions.</div>
+        <span class="product-tag" style="background:rgba(136,144,176,0.08);color:#8890b0;border:1px solid rgba(136,144,176,0.2)">PASSIVE YIELD</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKETS -->
+<section class="section" id="markets" style="padding-top:0">
+  <div class="section-inner">
+    <div class="section-tag">// Markets</div>
+    <h2 class="section-title">Live markets with Chainlink price feeds</h2>
+    <p class="section-sub">Every market uses a verified Chainlink oracle. Prices update every 30 seconds. 24/5 trading.</p>
+    <div class="markets-grid">
+      <div class="market">
+        <div class="market-sym">NVDA</div>
+        <div class="market-name">NVIDIA</div>
+        <div class="market-badge">24/5 · Chainlink</div>
+      </div>
+      <div class="market">
+        <div class="market-sym">AAPL</div>
+        <div class="market-name">Apple</div>
+        <div class="market-badge">24/5 · Chainlink</div>
+      </div>
+      <div class="market">
+        <div class="market-sym">TSLA</div>
+        <div class="market-name">Tesla</div>
+        <div class="market-badge">24/5 · Chainlink</div>
+      </div>
+      <div class="market">
+        <div class="market-sym">COIN</div>
+        <div class="market-name">Coinbase</div>
+        <div class="market-badge">24/5 · Chainlink</div>
+      </div>
+      <div class="market">
+        <div class="market-sym">SPY</div>
+        <div class="market-name">S&amp;P 500 ETF</div>
+        <div class="market-badge">24/5 · Chainlink</div>
+      </div>
+      <div class="market" style="border-top-color:var(--border);opacity:0.4">
+        <div class="market-sym" style="color:var(--muted)">+30</div>
+        <div class="market-name">More coming</div>
+        <div class="market-badge">Soon</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how" id="how">
+  <div class="section-inner">
+    <div class="section-tag">// How it works</div>
+    <h2 class="section-title">Three steps to your first option</h2>
+    <p class="section-sub">No account. No KYC. Just connect your wallet and trade.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Connect your wallet</div>
+        <div class="step-desc">Connect OKX Wallet or any EIP-1193 compatible wallet. Switch to Robinhood Chain (ID 4663). OPSTOCK adds the network automatically.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Choose your product</div>
+        <div class="step-desc">Write a covered call to earn premium on your stock tokens. Write a put to buy stocks at a discount. Place a binary bet on price direction. Or deposit into the yield vault.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Chainlink settles everything</div>
+        <div class="step-desc">At expiry, Chainlink price feeds determine the outcome. Payouts are automatic and on-chain. No counterparty risk. No manual settlement. Just smart contracts.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTRACT -->
+<section class="section" style="padding: 60px 40px;">
+  <div class="section-inner">
+    <div class="section-tag">// Verified Contracts</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2px;background:var(--border);border:1px solid var(--border)">
+      <div style="background:var(--surface2);padding:24px">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:0.1em;margin-bottom:8px">OPSTOCK CONTRACT</div>
+        <div style="font-size:13px;color:var(--green);font-family:'JetBrains Mono',monospace;word-break:break-all">0x3b8a62892873243ae18d1731ffd6e646f748ef80</div>
+        <a href="https://robinhoodchain.blockscout.com/address/0x3b8a62892873243ae18d1731ffd6e646f748ef80" target="_blank" style="display:inline-block;margin-top:12px;font-size:12px;color:var(--blue);text-decoration:none">View on Blockscout ↗</a>
+      </div>
+      <div style="background:var(--surface2);padding:24px">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:0.1em;margin-bottom:8px">ORACLE READER</div>
+        <div style="font-size:13px;color:var(--green);font-family:'JetBrains Mono',monospace;word-break:break-all">0x0d7e0148fc56b4f6601048ceb75d7904cba72bac</div>
+        <a href="https://robinhoodchain.blockscout.com/address/0x0d7e0148fc56b4f6601048ceb75d7904cba72bac" target="_blank" style="display:inline-block;margin-top:12px;font-size:12px;color:var(--blue);text-decoration:none">View on Blockscout ↗</a>
+      </div>
+      <div style="background:var(--surface2);padding:24px">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:0.1em;margin-bottom:8px">NETWORK</div>
+        <div style="font-size:20px;font-weight:800;color:var(--white);margin-bottom:4px">Robinhood Chain</div>
+        <div style="font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace">Chain ID: 4663</div>
+      </div>
+      <div style="background:var(--surface2);padding:24px">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:0.1em;margin-bottom:8px">ORACLE PROVIDER</div>
+        <div style="font-size:20px;font-weight:800;color:var(--white);margin-bottom:4px">Chainlink</div>
+        <div style="font-size:13px;color:var(--muted)">NVDA · AAPL · TSLA · COIN · SPY</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-content">
+    <h2>Start trading options on-chain today</h2>
+    <p>Connect your wallet and write your first covered call in under 2 minutes. No account required.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-primary">Launch App →</a>
+      <a href="https://x.com" target="_blank" class="btn-secondary">Follow on X ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="footer-hex"></div>
+      <span class="footer-brand">OPSTOCK</span>
+    </div>
+    <div class="footer-links">
+      <a href="#">App</a>
+      <a href="https://robinhoodchain.blockscout.com/address/0x3b8a62892873243ae18d1731ffd6e646f748ef80" target="_blank">Contract</a>
+      <a href="https://x.com" target="_blank">X / Twitter</a>
+    </div>
+    <div class="footer-copy">Robinhood Chain (4663) · Chainlink Oracles</div>
+  </div>
+</footer>
+
+<script>
+// Load live stats from chain
+async function loadStats() {
+  try {
+    const res = await fetch('https://rpc.mainnet.chain.robinhood.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        jsonrpc: '2.0', method: 'eth_call', id: 1,
+        params: [{ to: '0x3b8a62892873243ae18d1731ffd6e646f748ef80', data: '0x61bc221a' }, 'latest']
+      })
+    })
+    const data = await res.json()
+    if (data.result && data.result !== '0x') {
+      const opts = parseInt(data.result, 16)
+      document.getElementById('stat-options').textContent = opts.toString()
+    }
+  } catch(e) {}
+}
+loadStats()
+</script>
+</body>
+</html>
