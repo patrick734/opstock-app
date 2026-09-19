@@ -707,7 +707,7 @@ function VaultTab({ prices, loading, totalOpts, wallet, protStats }: any) {
     if (!wallet) return
     const tkn2 = SUPPORTED_TOKENS.find((t) => t.symbol === token)
     if (!tkn2) return
-    import('./lib/chain').then(({ publicClient, CONTRACTS, OPSTOCK_ABI }) => {
+    import('../lib/chain').then(({ publicClient, CONTRACTS, OPSTOCK_ABI }) => {
       publicClient.readContract({
         address: CONTRACTS.OPSTOCK,
         abi: OPSTOCK_ABI,
