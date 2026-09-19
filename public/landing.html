@@ -110,6 +110,164 @@
 
   /* DIVIDER */
   .divider { height: 1px; background: var(--border); }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 0 16px; }
+    .nav-links { display: none; }
+    .nav-cta { padding: 7px 14px; font-size: 12px; }
+    .nav-brand { font-size: 13px; }
+
+    .hero { padding: 100px 20px 60px; }
+    .hero h1 { font-size: 32px; }
+    .hero p { font-size: 14px; }
+    .hero-btns { flex-direction: column; align-items: center; }
+    .btn-primary, .btn-secondary { width: 100%; text-align: center; justify-content: center; padding: 13px 24px; }
+    .hero-tokens { gap: 8px; }
+    .token-pill { font-size: 11px; padding: 4px 10px; }
+
+    .stats-inner { grid-template-columns: 1fr 1fr; }
+    .stat { padding: 20px 16px; }
+    .stat-value { font-size: 24px; }
+
+    .section { padding: 60px 20px; }
+    .section-title { font-size: 24px; }
+    .section-sub { font-size: 14px; }
+
+    .products { grid-template-columns: 1fr; }
+    .product { padding: 24px; }
+
+    .markets-grid { grid-template-columns: 1fr 1fr; }
+
+    .steps { grid-template-columns: 1fr; }
+    .step { padding: 24px 20px; }
+    .step-num { font-size: 32px; }
+
+    .cta { padding: 80px 20px; }
+    .cta h2 { font-size: 26px; }
+    .cta p { font-size: 14px; }
+
+    footer { padding: 24px 20px; }
+    .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .footer-links { flex-wrap: wrap; gap: 16px; }
+
+    .hero-badge span { font-size: 11px; }
+
+    div[style*="grid-template-columns: repeat(auto-fit"] { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 480px) {
+    .stats-inner { grid-template-columns: 1fr; }
+    .markets-grid { grid-template-columns: 1fr; }
+  }
+
+
+  /* ── MOBILE FIXES ─────────────────────────────────── */
+  @media (max-width: 768px) {
+
+    /* NAV — fix overlap */
+    nav {
+      padding: 0 16px;
+      height: auto;
+      flex-wrap: wrap;
+      gap: 0;
+    }
+    .nav-logo { padding: 14px 0; }
+    .nav-links { display: none; }
+    .nav-cta {
+      padding: 8px 14px;
+      font-size: 12px;
+      margin: 10px 0;
+    }
+    .nav-brand { font-size: 13px; letter-spacing: 0.1em; }
+    .nav-hex { width: 22px; height: 22px; }
+
+    /* HERO — fix text size */
+    .hero { padding: 90px 20px 60px; }
+    .hero h1 { font-size: 28px; line-height: 1.2; }
+    .hero p { font-size: 14px; margin-bottom: 28px; }
+    .hero-badge { margin-bottom: 20px; }
+    .hero-badge span { font-size: 11px; }
+
+    /* BUTTONS — fix overflow */
+    .hero-btns {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .btn-primary, .btn-secondary {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+      padding: 14px 20px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    /* TOKENS */
+    .hero-tokens { gap: 6px; justify-content: center; }
+    .token-pill { font-size: 11px; padding: 4px 10px; }
+
+    /* STATS — fix stacking */
+    .stats { padding: 40px 16px; }
+    .stats-inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+    }
+    .stat { padding: 18px 14px; }
+    .stat-value { font-size: 26px; }
+    .stat-label { font-size: 10px; }
+
+    /* SECTIONS */
+    .section { padding: 60px 16px; }
+    .section-title { font-size: 22px; }
+    .section-sub { font-size: 13px; margin-bottom: 32px; }
+
+    /* PRODUCTS — single column */
+    .products { grid-template-columns: 1fr; }
+    .product { padding: 20px; }
+    .product-title { font-size: 14px; }
+    .product-desc { font-size: 12px; }
+
+    /* MARKET CARDS — fix width */
+    .markets-grid { grid-template-columns: 1fr 1fr; gap: 1px; }
+    .market { padding: 14px; }
+    .market-sym { font-size: 16px; }
+    .market-name { font-size: 10px; }
+    .market-badge { font-size: 9px; }
+
+    /* HOW IT WORKS */
+    .steps { grid-template-columns: 1fr; }
+    .step { padding: 24px 16px; }
+    .step-num { font-size: 36px; }
+    .step-title { font-size: 14px; }
+    .step-desc { font-size: 12px; }
+
+    /* CTA */
+    .cta { padding: 60px 16px; }
+    .cta h2 { font-size: 24px; }
+    .cta p { font-size: 13px; margin-bottom: 28px; }
+
+    /* CONTRACT SECTION */
+    div[style*="grid-template-columns: repeat(auto-fit"] {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* FOOTER */
+    footer { padding: 24px 16px; }
+    .footer-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .footer-links { flex-wrap: wrap; gap: 14px; }
+    .footer-copy { font-size: 11px; }
+    .footer-brand { font-size: 13px; }
+  }
+
+  @media (max-width: 400px) {
+    .hero h1 { font-size: 24px; }
+    .stats-inner { grid-template-columns: 1fr; }
+    .markets-grid { grid-template-columns: 1fr; }
+    nav { padding: 0 12px; }
+    .hero { padding: 80px 14px 50px; }
+  }
+
 </style>
 </head>
 <body>
@@ -126,7 +284,7 @@
     <a href="#how">How it works</a>
     <a href="https://robinhoodchain.blockscout.com/address/0x3b8a62892873243ae18d1731ffd6e646f748ef80" target="_blank">Contract ↗</a>
   </div>
-  <a href="/app" class="nav-cta">Launch App →</a>
+  <a href="#" class="nav-cta">Launch App →</a>
 </nav>
 
 <!-- HERO -->
@@ -141,7 +299,7 @@
     <h1>Options on <span>Tokenized Stocks.</span> On-chain.</h1>
     <p>Write covered calls, cash-secured puts, and binary bets on real stock tokens. Powered by Chainlink oracles. Settled on-chain. No custodian.</p>
     <div class="hero-btns">
-      <a href="/app" class="btn-primary">Launch App →</a>
+      <a href="#" class="btn-primary">Launch App →</a>
       <a href="https://robinhoodchain.blockscout.com/address/0x3b8a62892873243ae18d1731ffd6e646f748ef80" target="_blank" class="btn-secondary">View Contract ↗</a>
     </div>
     <div class="hero-tokens">
@@ -315,7 +473,7 @@
     <h2>Start trading options on-chain today</h2>
     <p>Connect your wallet and write your first covered call in under 2 minutes. No account required.</p>
     <div class="hero-btns">
-      <a href="/app" class="btn-primary">Launch App →</a>
+      <a href="#" class="btn-primary">Launch App →</a>
       <a href="https://x.com" target="_blank" class="btn-secondary">Follow on X ↗</a>
     </div>
   </div>
