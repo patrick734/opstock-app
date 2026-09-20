@@ -7,6 +7,10 @@ import { getProtocolStats } from '../lib/indexer'
 import { createWalletClient, custom, parseUnits } from 'viem'
 
 const NAV = ['MARKETS', 'TRADE', 'BINARY', 'VAULT', 'POSITIONS']
+const TOOLS = [
+  { label: 'ORDERBOOK', href: '/orderbook' },
+  { label: 'CALCULATOR', href: '/calculator' },
+]
 const OPTION_STATUS = ['OPEN', 'EXERCISED', 'EXPIRED', 'CANCELLED']
 
 const S = {
@@ -135,6 +139,11 @@ export default function Home() {
             {NAV.map(n=>(
               <button key={n} onClick={()=>setTab(n)} style={S.navBtn(tab===n)}>{n}</button>
             ))}
+            <div style={{marginLeft:'auto',display:'flex',alignItems:'center',flexShrink:0}}>
+              {TOOLS.map(t=>(
+                <a key={t.label} href={t.href} style={{padding:'10px 14px',fontSize:'10px',fontFamily:'inherit',letterSpacing:'0.12em',color:'#3a4a5a',textDecoration:'none',borderBottom:'2px solid transparent',whiteSpace:'nowrap',display:'block'}}>{t.label} ↗</a>
+              ))}
+            </div>
           </div>
         </div>
       </header>
