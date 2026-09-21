@@ -1,7 +1,7 @@
-import { readFileSync } from 'fs'
-import { join } from 'path'
+import { readFileSync } from "fs"
+import { join } from "path"
 
 export default function Home() {
-  const html = readFileSync(join(process.cwd(), 'public/landing.html'), 'utf-8')
+  const html = readFileSync(join(process.cwd(), "public/landing.html"), "utf-8")
   return <div dangerouslySetInnerHTML={{ __html: html }} />
 }
