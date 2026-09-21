@@ -10,6 +10,7 @@ const NAV = ['MARKETS', 'TRADE', 'BINARY', 'VAULT', 'POSITIONS']
 const TOOLS = [
   { label: 'ORDERBOOK', href: '/orderbook' },
   { label: 'CALCULATOR', href: '/calculator' },
+  { label: 'STAKING', href: '/staking' },
 ]
 const OPTION_STATUS = ['OPEN', 'EXERCISED', 'EXPIRED', 'CANCELLED']
 
