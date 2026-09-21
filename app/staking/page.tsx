@@ -38,11 +38,13 @@ async function getWalletClient() {
   return createWalletClient({ chain: robinhoodChain, transport: custom(p) })
 }
 
-function fmt(n: bigint, decimals: number = 18, display: number = 4): string {
-  return parseFloat(formatUnits(n, decimals)).toFixed(display)
+function fmt(n: bigint | undefined | null, decimals: number = 18, display: number = 4): string {
+  if (!n && n !== 0n) return '0.0000'
+  try { return parseFloat(formatUnits(n, decimals)).toFixed(display) } catch { return '0.0000' }
 }
 
-function timeLeft(unlockTime: bigint): string {
+function timeLeft(unlockTime: bigint | undefined): string {
+  if (!unlockTime) return '—'
   const now = BigInt(Math.floor(Date.now() / 1000))
   if (unlockTime <= now) return 'Unlocked'
   const diff = Number(unlockTime - now)
